@@ -1,10 +1,13 @@
 ﻿﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text;
+
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.EventArgs;
+
 using Newtonsoft.Json;
-using System.Text;
 
 namespace Dash
 {
@@ -17,13 +20,13 @@ namespace Dash
 
         static async Task MainAsync()
         {
-            var json = string.Empty;
+            var configJsonData = string.Empty;
 
             using (var fs = File.OpenRead("config.json"))
             using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
-                json = await sr.ReadToEndAsync().ConfigureAwait(false);
+                configJsonData = await sr.ReadToEndAsync().ConfigureAwait(false);
 
-            var configJson = JsonConvert.DeserializeObject<ConfigJson>(json);
+            var configJson = JsonConvert.DeserializeObject<ConfigJson>(configJsonData);
 
             var discord = new DiscordClient(new DiscordConfiguration()
             {
@@ -36,9 +39,18 @@ namespace Dash
             var commands = discord.UseCommandsNext(new CommandsNextConfiguration() { StringPrefixes = new[] { configJson.Prefix } });
 
             commands.RegisterCommands<FunModule>();
+            commands.RegisterCommands<InfoModule>();
+
+            discord.Ready += OnReady;
 
             await discord.ConnectAsync();
             await Task.Delay(-1);
+        }
+
+        private static Task OnReady(DiscordClient s, ReadyEventArgs e)
+        {
+            Console.WriteLine("Bot online!");
+            return Task.CompletedTask;
         }
     }
 }
