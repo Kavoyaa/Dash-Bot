@@ -40,6 +40,7 @@ namespace Dash
 
             commands.RegisterCommands<FunModule>();
             commands.RegisterCommands<InfoModule>();
+            commands.RegisterCommands<UtilityModule>();
 
             discord.Ready += OnReady;
 
