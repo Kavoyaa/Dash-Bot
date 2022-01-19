@@ -10,4 +10,10 @@ public class FunModule : BaseCommandModule
     {
         await ctx.Channel.SendMessageAsync(text);
     }
+
+    [Command("hello")]
+    public async Task Hello(CommandContext ctx)
+    {
+        await ctx.RespondAsync("Hello!");
+    }
 }
