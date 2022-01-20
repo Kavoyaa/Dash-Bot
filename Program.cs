@@ -41,6 +41,7 @@ namespace Dash
             commands.RegisterCommands<FunModule>();
             commands.RegisterCommands<InfoModule>();
             commands.RegisterCommands<UtilityModule>();
+            commands.RegisterCommands<AnimalsModule>();
 
             discord.Ready += OnReady;
 
